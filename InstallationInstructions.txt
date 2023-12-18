@@ -33,5 +33,7 @@ To download the respository from GitHub:
    - Use the cd command (which stands for "change directory") followed by the path to the folder where the files downloaded from the repository are. 
    - For example, if your files are in a folder called "my_project" within a folder called "container" on your desktop, you would type: cd Desktop\container\my_project
 
-7. Run main.py by typing: python main.py
+7. Run main.py by typing:
+   - On Windows: `python main.py`
+   - On macOS/Linux: `python3 main.py`
                   
