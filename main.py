@@ -18,7 +18,9 @@ def main():
     while not num_of_teams.isdigit() or num_of_teams in ["0", "1"]:
         num_of_teams = input("\nERROR: Please enter a proper number: ")
     num_of_teams = int(num_of_teams)
-
+    print("\nHINT: Find the absolute path by going to your File Explorer, single-clicking\non the file you "
+          "are using, and holding Ctrl + Shift + C at the same time.\nRemove the quotation marks before "
+          "submitting it to the League Simulator.")
     file_path = input(f"\nPlease enter an absolute file path to a list of {num_of_teams} seeded teams in order "
                       f"(no quotation marks): ")
     # Ensures that the file exists, has proper seeding, and zero duplicate teams
@@ -32,8 +34,8 @@ def main():
         if file_path == "0":
             sys.exit(0)
         file_valid = file_validity_checker(file_path, num_of_teams)
-
-    rounds = input("\nPlease enter how many round-robins you would like to play with these teams (between 1 and 5): ")
+    print("\n\nRound-Robin: A setup in which each team plays in turn against every other.")
+    rounds = input("\n\nPlease enter how many round-robins you would like to play with these teams (between 1 and 5): ")
     # Ensures that an appropriate amount of rounds is entered.
     while rounds not in ["1", "2", "3", "4", "5"]:
         rounds = input("\nERROR: Please enter an integer between 1 and 5 (inclusive): ")
@@ -125,7 +127,7 @@ def end_of_sim_menu(final_obj_list, rounds):
     option = "1"
     while option != "0":
         print_menu()
-        option = input("\nEnter an option from the menu above: ")
+        option = input("\nEnter 'A', 'B', 'C', OR '0' from the menu above: ")
         if option == 'A':
             search_team_results(final_obj_list)
         elif option == 'B':
@@ -144,7 +146,7 @@ def search_team_results(obj_list):
 
     :param: final_obj_list - list of all team objects
     """
-    team = input("\nEnter a team to view all of their results: ")
+    team = input("\nEnter a team name to view all of their results: ")
     # Ensures that entered teams is valid
     valid_team = False
     for obj in obj_list:
@@ -545,7 +547,7 @@ def check_criteria(final_obj_list, tied_team):
     Check tiebreaker criteria for teams with the same number of points. The criteria include highest goal difference
     (gd), most goals scored (gf), and least goals against (ga) (in that order). Teams are sorted accordingly.
 
-    * Exchange sort algorithm x 3 - picked because of small lists being passed
+    * Selection sort algorithm x 3 - picked because of small lists being passed
 
     CALLS: swap
     CALLED BY: decide_ties
