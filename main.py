@@ -545,7 +545,7 @@ def check_criteria(final_obj_list, tied_team):
     Check tiebreaker criteria for teams with the same number of points. The criteria include highest goal difference
     (gd), most goals scored (gf), and least goals against (ga) (in that order). Teams are sorted accordingly.
 
-    * Selection sort algorithm x 3 - picked because of small lists being passed
+    * Exchange sort algorithm x 3 - picked because of small lists being passed
 
     CALLS: swap
     CALLED BY: decide_ties
