@@ -23,6 +23,37 @@ class Team:
         self.game_obj_list = []
         self.playoff_game_list = []
         self.playoff_seed = 0
+        self.playoff_wins = 0
+        self.playoff_losses = 0
+        self.playoff_gf = 0
+        self.playoff_ga = 0
+
+    def incr_playoff_wins(self):
+        self.playoff_wins += 1
+
+    def incr_playoff_losses(self):
+        self.playoff_losses += 1
+
+    def incr_playoff_gf(self, goals):
+        self.playoff_gf += goals
+
+    def incr_playoff_ga(self, goals):
+        self.playoff_ga += goals
+
+    def get_playoff_wins(self):
+        return self.playoff_wins
+
+    def get_playoff_losses(self):
+        return self.playoff_losses
+
+    def get_playoff_gf(self):
+        return self.playoff_gf
+
+    def get_playoff_ga(self):
+        return self.playoff_ga
+
+    def get_playoff_gd(self):
+        return self.playoff_gf - self.playoff_ga
 
     def get_playoff_seed(self):
         return self.playoff_seed

@@ -92,7 +92,7 @@ def start_season(teams_dictionary, level_of_randomness, num_of_teams, rounds):
     # Tiebreakers for if teams above are tied on GD
     decide_ties(final_obj_list)
     print_table(final_obj_list, rounds)
-
+    num_of_teams_in_tourney = 0
     tournament = input("\nWould you like to play an end-of-season tournament? Enter 'y' for yes or 'n' for no: ")
     while tournament.lower() not in ['y', 'n']:
         tournament = input("\n\nERROR: Please enter 'y' or 'n': ")
@@ -110,10 +110,10 @@ def start_season(teams_dictionary, level_of_randomness, num_of_teams, rounds):
             level_of_randomness = input("\nERROR. Please enter a number 1 through 4: ")
         # Tournament simulation begins
         bracket_simulator(bracket, int(level_of_randomness), num_of_teams_in_tourney)
-    end_of_sim_menu(final_obj_list, rounds)
+    end_of_sim_menu(final_obj_list, rounds, tournament.lower())
 
 
-def end_of_sim_menu(final_obj_list, rounds):
+def end_of_sim_menu(final_obj_list, rounds, tournament):
     """
     Menu for viewing results of the simulation. Called after the simulation is over.
 
@@ -122,6 +122,7 @@ def end_of_sim_menu(final_obj_list, rounds):
 
     :param final_obj_list: list of all Team objects
     :param rounds: number of round-robins played in the league regular season
+    :param tournament - 'y' if one was played, 'n' if not
 
     """
     option = "1"
@@ -134,8 +135,50 @@ def end_of_sim_menu(final_obj_list, rounds):
             head_to_head_results(final_obj_list)
         elif option == 'C':
             print_table(final_obj_list, rounds)
+        elif option == 'D':
+            show_team_stats(final_obj_list, rounds, tournament)
         elif option != "0":
             print("\nPlease enter a valid selection.")
+
+
+def show_team_stats(obj_list, rounds, tournament_played):
+    """
+        Shows in-depth statistics for each team's reg. season/playoff records
+
+        CALLED BY: end_of_sim_menu
+        CALLS: None
+
+        :param obj_list: list of all Team objects
+        :param rounds: number of round-robins played in the league regular season
+        :param tournament_played - 'y' if one was played, 'n' if not
+    """
+    team = input("\nEnter a team name to view all of their statistics: ")
+    # Ensures that entered teams is valid
+    valid_team = False
+    for obj in obj_list:
+        if obj.get_team() == team:
+            team = obj
+            valid_team = True
+            break
+    # If the team is valid...
+    if valid_team is True:
+        print(f"\n{team.get_team()}:")
+        print("---------------------")
+        print(f"Regular Season Finish: {obj_list.index(team) + 1}")
+        print(f"Regular Season Record (W-D-L): {team.get_wins()}-{team.get_draws()}-{team.get_losses()} "
+              f"({(len(obj_list) - 1) * rounds} games)")
+        print(f"Regular Season Goals: GF: {team.get_gf()}, GA: {team.get_ga()}, GD: {team.get_gd()}")
+        # Prints tournament stats if a tournament was actually played
+        if tournament_played == 'y':
+            if len(team.get_playoff_game_list()) == 0:
+                print(f"\n{team.get_team()} did not make the playoffs.")
+            else:
+                print("---------------------")
+                print(f"Playoff Record (W-L): {team.get_playoff_wins()}-{team.get_playoff_losses()} ")
+                print(f"Playoff Goals: GF: {team.get_playoff_gf()}, GA: {team.get_playoff_ga()}, "
+                      f"GD: {team.get_playoff_gd()}")
+    else:
+        print("\nERROR: Invalid Team.")
 
 
 def search_team_results(obj_list):
@@ -232,9 +275,10 @@ def print_menu():
         CALLED BY: end_of_sim_menu
     """
     print("\n\n*************** MENU ***************")
-    print("\tA. Search Team Results")
+    print("\tA. Search Team Game Results")
     print("\tB. View Head to Head Records")
     print("\tC. Show Regular Season Table")
+    print("\tD. Search Final Team Stats")
     print("\t0. Exit Menu")
 
 
@@ -733,7 +777,7 @@ def get_score(winning_team, losing_team, playoffs, team1=None, team2=None):
     :param playoffs - True if playoff game, False otherwise
     """
     # Tuple is where score values are randomly picked from
-    score_tuple = [0] * 13 + [1] * 20 + [2] * 11 + [3] * 7 + [4] + [5]
+    score_tuple = [0] * 19 + [1] * 22 + [2] * 11 + [3] * 7 + [4] * 2 + [5]
 
     # For if a tie has occurred
     if winning_team is None:
@@ -748,12 +792,12 @@ def get_score(winning_team, losing_team, playoffs, team1=None, team2=None):
         team2.incr_ga(tie_goals)
     else:
         # Random number chosen from score_tuple (can't be 5)
-        losing_team_goals = score_tuple[random.randint(0, len(score_tuple) - 3)]
+        losing_team_goals = score_tuple[random.randint(0, len(score_tuple) - 2)]
         # Random number chosen from score_tuple (can't be 0)
-        winning_team_goals = score_tuple[random.randint(14, len(score_tuple) - 1)]
+        winning_team_goals = score_tuple[random.randint(19, len(score_tuple) - 1)]
         # winning_team_goals regenerated until it is greater than losing_team_goals
         while winning_team_goals <= losing_team_goals:
-            winning_team_goals = score_tuple[random.randint(14, len(score_tuple) - 1)]
+            winning_team_goals = score_tuple[random.randint(20, len(score_tuple) - 1)]
         # Team objects updated accordingly
         if playoffs is False:
             team1.add_game(Game(winning_team.get_team(), winning_team_goals, losing_team.get_team(), losing_team_goals,
@@ -768,9 +812,15 @@ def get_score(winning_team, losing_team, playoffs, team1=None, team2=None):
             winning_team.add_playoff_game(
                 Game(winning_team.get_team(), winning_team_goals, losing_team.get_team(), losing_team_goals,
                      winning_team.get_team()))
+            winning_team.incr_playoff_wins()
+            winning_team.incr_playoff_gf(winning_team_goals)
+            winning_team.incr_playoff_ga(losing_team_goals)
             losing_team.add_playoff_game(
                 Game(winning_team.get_team(), winning_team_goals, losing_team.get_team(), losing_team_goals,
                      winning_team.get_team()))
+            losing_team.incr_playoff_losses()
+            losing_team.incr_playoff_gf(losing_team_goals)
+            losing_team.incr_playoff_ga(winning_team_goals)
 
 
 def get_result(weighted_seed_diff, level_of_randomness):
