@@ -29,3 +29,4 @@ Results Analysis:
     A. Search for specific team results.
     B. View head-to-head records.
     C. Display regular season standings.
+    D. View team reg. season/playoff stats.
