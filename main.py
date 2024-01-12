@@ -128,7 +128,7 @@ def end_of_sim_menu(final_obj_list, rounds, tournament):
     option = "1"
     while option != "0":
         print_menu()
-        option = input("\nEnter 'A', 'B', 'C', OR '0' from the menu above: ")
+        option = input("\nEnter 'A', 'B', 'C', 'D', OR '0' from the menu above: ")
         if option == 'A':
             search_team_results(final_obj_list)
         elif option == 'B':
