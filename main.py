@@ -257,15 +257,20 @@ def head_to_head_results(obj_list):
             elif team2.get_team() == game.get_team2():
                 print(game.get_team2(), " ", game.get_team2_goals(), " - ", game.get_team1_goals(), " ",
                       game.get_team1())
-        # Checks to make sure both teams made playoffs
+          # Checks to make sure both teams made playoffs
         if len(team1.get_playoff_game_list()) != 0 and len(team2.get_playoff_game_list()) != 0:
             # Prints all playoff match-up results via team1.get_playoff_game_list()
             print("\nPLAYOFFS:")
             print("-------------------")
+            # playoff_mtg represents if the 2 teams met in the playoffs or not
+            playoff_mtg = False
             for game in team1.get_playoff_game_list():
                 if team2.get_team() in [game.get_team1(), game.get_team2()]:
+                    playoff_mtg = True
                     print(game.get_team1(), " ", game.get_team1_goals(), " - ", game.get_team2_goals(), " ",
                           game.get_team2())
+            if playoff_mtg is False:
+                print("These two teams did not meet in the playoffs.")
     else:
         print("\nERROR: Invalid Team.")
 
