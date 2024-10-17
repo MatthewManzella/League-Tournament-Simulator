@@ -1,4 +1,4 @@
-# League/Tournament Simulator
+# Soccer League/Tournament Simulator
 Welcome to the Soccer League/Tournament Simulator! This Python program enables users to simulate a soccer league season and an end-of-season tournament. Users can input the number of teams, a file path containing seeded teams, the number of round-robins, and the level of randomness for the simulation.
 
 Getting Started:
